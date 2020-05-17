@@ -1,8 +1,5 @@
-node_modules
+node_modules/
 .DS_Store*
 .hubot_history
 join_messages.json
-channels.json
-channels_log
-report.csv
-uploads
+start.sh
