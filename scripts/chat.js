@@ -47,6 +47,17 @@ module.exports = robot => {
     msg.send(`入室メッセージを削除しました！`);
   });
 
+  // 発言したチャンネルの入室メッセージの設定を確認する
+  robot.hear(/^入室メッセージ表示/i, msg => {
+    const channelId = msg.envelope.room;
+    for (let [key, value] of joinMessages) {
+      if (channelId === key) {
+        let message = value.replace(/\\n/g, '\n');
+        msg.send(`現在登録されている入室メッセージは\n\n${message}\n\nです。`);
+      }
+    }
+  });
+
   //部屋に入ったユーザーへの入室メッセージを案内 %USERNAME% はユーザー名に、%ROOMNAME% は部屋名に置換
   robot.enter(msg => {
     let username;
@@ -64,7 +75,8 @@ module.exports = robot => {
       if (channelId === key) {
         let message = value
           .replace('%USERNAME%', username)
-          .replace('%ROOMNAME%', '#' + roomname);
+          .replace('%ROOMNAME%', '#' + roomname)
+          .replace(/\\n/g, '\n');
         msg.send(message);
       }
     }
